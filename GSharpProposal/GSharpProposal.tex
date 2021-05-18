@@ -44,17 +44,18 @@ Implementing fully functioning programming language that compiles into assembler
 \subsection*{Visual Editor}
 The visual editor, or in this case node editor, will be implemented as a webpage canvas using Konvajs framework.
 Konvajs lets you easily serialize and deserialize data and populate the 'code map'. Refer to figure \ref{fig:codemap}.
+
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{codemap.PNG}
-    \caption{Code Map}
-    \label{fig:codemap}
+\centering
+\includegraphics[width=1\textwidth]{codemap.PNG}
+\caption{Code Map}
+\label{fig:codemap}
 \end{figure}
 
 The webpage will be able to serialize all node structure into a JSON file, which will be a source code of a file. This JSON can then be parsed by Transpiler and convert its contents into C\# IL.
 The Konvajs framework will be closely tied with Electron app called 'Visual Studio Code' (henceforth VSCode). VSCode 
 \subsection*{Transpiler}
-As previously stated, the primary purpose of a transpiler is converting GryphonSharp-generated JSON files into C\# IL. Transpiler is named 
+As previously stated, the primary purpose of a transpiler is converting source of GryphonSharp-generated JSON files into C\# IL. Transpiler is named 
 \subsection*{Language Server}
 
 
