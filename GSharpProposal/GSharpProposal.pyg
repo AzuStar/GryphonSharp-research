@@ -1,0 +1,20 @@
+var nums, sum, list1, i;
+
+// Describe this function...
+function Main() {
+  list1 = [111, 222, 333];
+  window.alert(Add_Numbers(list1));
+}
+
+// Describe this function...
+function Add_Numbers(nums) {
+  sum = 0;
+  for (var i_index in nums) {
+    i = nums[i_index];
+    sum = sum + i;
+  }
+  return sum;
+}
+
+
+Main();
