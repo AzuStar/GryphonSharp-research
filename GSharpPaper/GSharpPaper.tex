@@ -9,6 +9,30 @@
 \usepackage{amssymb}
 \usepackage[bottom]{footmisc}
 \usepackage{listings}
+\usepackage{hyperref}
+\usepackage{pifont}
+\usepackage{tabularx}
+\newcommand{\tick}{\ding{51}}
+\newcommand{\cross}{\ding{54}}
+
+\lstdefinestyle{codels}{
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=3,
+    frame=single, 
+    label=main,
+}
+
+\lstset{style=codels}
+
+\setlength{\parindent}{0em}
+% \setlength{\parskip}{1em}
 
 \begin{document}
 
@@ -18,7 +42,7 @@
 
     \includegraphics[scale=0.5]{AzuGryphonSharp.png} %\vspace{0.5cm}
 
-    \huge  \textbf{GryphonSharp Thesis}
+    \huge  \textbf{GryphonSharp v1}
 
     \vspace{2cm}
 
@@ -36,35 +60,159 @@
 \end{titlepage}
 \pagebreak
 
+\tableofcontents
+\pagebreak
+% \begin{multicols*}{2}
+    
+
 \begin{abstract}
     Write up abstract
 \end{abstract}
 
 \section{Introduction}
-Why do it and how research impacts selected area of research.
+Since the first computers, there has existed a strong need for a high-level programming language that would allow users to quickly and efficiently code applications and systems that they need for their businesses, personal projects or even games.  
+
+This research has a few distinctive objectives it attempts to achieve:
+\begin{itemize}
+    \item A set of questions in the section \nameref{sec:motive}.
+    \item Proposes a design for creating simple programs through G\# language.
+    \item Presents implementation of G\# VPE.
+\end{itemize}
+
+// Aims of this research
+
+
+
 
 \section{Background}
-Current state of the art. What is the gap the research is trying to achieve.
+Unfortunately, due to the scope of research and novelty of the topic, there is no way to easily pinpoint exact beginning of the programming in general. For this reason, the research will begin to explore programming since the appearance of first languages.
 
-\section{Design}
-In-depth explanation of the design 
+\subsection{First abstract language}
+The first ever abstract language appeared around 1969-1973 and it rapidly replaced assembly language which offered ‘one-at-a-time’ instruction in a semi-readable for human format. The C Programming Language quickly became a legend among programmers, especially those working on a very first UNIX operating system\citep{ritche_clang}.
+The C programming language introduced a wide range of abstract paradigms that programmers could utilize to swiftly develop readable programs where they can orient freely and extend to their needs. Some of the examples of such paradigms include: struct, enum and array indexing with the following syntax:
+
+\begin{lstlisting}[caption=C array indexing]
+variable[2]
+other_variable[0]
+\end{lstlisting}
+
+Programs that would otherwise require hours of revision and coding could be written in a matter of minutes, if not seconds. After C language, a major abstract language at a time, was standardized by ANSI, it became the primary language for most computing systems.  
+
+Despite being a standard for most, if not all, computing systems, the language was platform-specific, meaning different platforms would have specific implementations, hence compiled executables could only be run on the platforms for which executables were explicitly compiled. That way executables compiled for Windows would not run on MacOS/Linux Unix systems.
+
+Unlike most, C language offers naked address referencing, meaning any given number could be converted into address in memory and backwards. This low level access to actual computer memory is strongly tied to memory leaks, critical security leaks, and even unwanted overflows that, if left unchecked, could violate kernel space from user space, which in turn could trigger kernel panic.\citep{6234805} Not only extremely low-level access that the C language provides poses severe vulnerability risk to the entire operating system, but it also requires significantly advanced memory management systems written by the applications' developers. In contrast, languages such as Java or C\# have built-in memory management that automatically frees memory when instances no longer accessible.
+For these reasons C language simply did not offer enough abstraction, security, and flexibility to aid development of complex programs.
+
+\subsection{First Visual Programming Environments}
+Visual Programming Environments (henceforth VPE) was introduced for educational purposes first appearing in 2003 for Intel's Computer Clubhouses where young could learn computer technologies. Original designs of scratch were solely intended for young by adding visual programmable elements that manipulate media on screen.
+Scratch UI uses sturdy design principles that achieve it's ultimate goal i.e. Single Window with multiple tabs ensures there is always visible primary components such as scene or code.
+
+\subsection{Minecraft and Redstone}
+Why Minecraft game that has nothing to do with teaching and programming (at the very least initially) has a communities which focus heavily on implementing complex computing systems (even entire CPU architectures in Minecraft using nothing else but plain single-thread Redstone)
+
+\subsection{Transpilers, an upgrade to existing languages}
+Transpilers take source code and compile into other source code. This is 'transpilation'.
+
+\subsection{Blockly and general-purpose VPE}
+Blockly was a good take on general-purpose VPE. It uses transpiler principles to interpret visual representation of a code. It support wide range of target languages, however, currently, without specifically designed environment, Blockly, out-of-the-box, only supports few paradigms: functions, variables, arithmetic operations, flow control (loops, if statements) and a few more basic primitives like lists and color.\footnote{https://developers.google.com/blockly}
+Blockly, natively, is only a set of theories and findings that build on top of preexisting VPE 'Scratch'. Despite it having rich and extensible documentation, Blockly is just a set of tools for creating VPEs.
+
+
+
+
+
+\section{Motivation}
+\label{sec:motive}
+How C achieved it's purpose?
+Why has it became so popular?
+
+How C represented basic programming constructs (for, while loops, if statements)?
+When and why it fails?
+
+Why Scratch became so popular?
+How Scratch aims to achieve their aims?
+
+Scratch is limited by Scratch VM.
+
+Transpilers are interesting take on simplifying development.
+Any attempts to generate code from Visual Programming Environments - refer to Blockly.
+
+
+
+
+
+
+\section{System Design}
+Previously mentioned transpilers were 'the next step' towards higher languages that might provide task-specific abstraction level and paradigms for easy development of said tasks. For example, many game studios that started working in limited language such as Lua had to either rewrite their entire game on a different engine under different programming language. However, since introduction of transpilers that use higher-level or simpler languages to transpile to low-lever or complex languages, one of the most popular examples (in addition to mentioned Typescript-Javascript transpiler) being CSharp.lua\footnote{https://github.com/yanghuan/CSharp.lua} which takes c\# code and transpilers it into Lua code retaining most, if not all original language features such as reflection, polymorphism, encapsulation etc.
+
+In this project, it was decided to utilize offline transpiler. This decision is motivated by strong presence of high-level heavily optimized languages such as Java, Javascript, C\#, Python, C++ and others. In contrast, the other choices were: Compiler and Interpreter.
+Interpreter is an algorithm which uses calls and translates them one by one into bytecode, all of this 'interpretation' is happening at runtime and therefore creates huge overhead because every instruction the interpreter executes, essentially has to be looked up before it can be executed. Look up of interpreters is \textit{usually} capped at RAM latency, rather than CPU cache latency, meaning look up of instructions happens in RAM in worst case scenario.
+Compiler both JIT and AOT require significant investment of time to design and implement from scratch. For purposes of this research, creating custom G\# to machine code compiler would be infeasible and would simply go outside of this project's scope.
+
+
+
+
+
+
+
+
+\section{Language Design}
+Design will be split into multiple sections, this is because over the duration of the project this has changed a lot and evolved over the duration of the research addressing one issue at a time, but starting from scratch every time.
+
+\subsection{Starcraft II inspired Behaviour Oriented Design}
+
+\subsection{Node-like Shader Editor Design}
+
+\subsection{Unreal Engine Blueprints inspired Design}
+
+\subsection{Stateless Node Editor}
+
+
+
 
 \section{Implementation}
-Small section on how it is achieved, including cross-platform.
+//Small section on how it is achieved, including cross-platform.
+\subsection{Intermediate GryphonSharp Representation}
+Intermediate G\# Representation (henceforth G\# IR) is a JSON-structured file containing code, data and metadata for both Transpiler and Node Editor.
+\subsection{Incomplete Components}
+Following subsections will include incomplete or unfinished components of this project. Generally, just like in the proposal of the GryphonSharp, the 3 key components this research was trying to achieve were: Language Server (GryphonSharp-Overwatch), G\#-to-C\# Transpiler (GryphonSharp-Transpiler), Visual Node Editor (GryphonSharp-vscode). Every component is detailed and documented in the following subsections.
+
+\subsubsection{Language Server}
+Originally, Language Server, codenamed 'Overwatch', was planned to be implemented with VSCode language server protocol.\footnote{https://code.visualstudio.com/api/language-extensions/language-server-extension-guide}
+\subsubsection{G\#-to-C\# Transpiler}
+\subsubsection{Visual Node Editor}
+
+
+
+
 
 \section{Example Application}
+//Mock up examples
+
+
+
+
 
 
 \section{Discussion}
+//Why this is cool
 
 
-\section{Summary}
+
+
 
 
 \section{Appendix}
 
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{}
+%     \caption{Gantt Chart}
+%     \label{fig:gantt}
+%     \end{figure}
 
-
+% \end{multicols*}
+\pagebreak
 \bibliographystyle{plain}
-\bibliography{refs}
+\bibliography{refs.bib}
 \end{document}
