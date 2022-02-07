@@ -73,8 +73,8 @@
 %     Write up abstract
 % \end{abstract}
 
-\section{Artefacts of the research}
-
+\section{Artifacts of the research}
+Any programs that were created during the development of dissertation.
 
 \section{Introduction}
 Since the first computers, there has existed a strong need for a high-level programming language that would allow users to quickly and efficiently code applications and systems that they need for their businesses, personal projects or even games.
@@ -103,30 +103,34 @@ In contrast, visual languages make it much easier to deal with variables because
     \label{fig:exampl1}
 \end{figure}
 
-Those are:
+Primitive and even complex types, especially within a function do not require a symbolic name, because a symbolic link is instead established. 
+
+This research was inspired by Object-Oriented Language C\#. We will first address what is wrong with existing OOP data model, then we will address anything C\# does poorly.
+
+OOP data model generally suffers from:
 \begin{itemize}
     \item \textbf{Fragile base class} \newline
-          The problem comes from the ability to make changes to base class, which require all inheriting classes to be inspected for resulting faulty behaviours.
-          For example here is example code for parent and child class in listing \ref*{fragile1}.
-          \begin{lstlisting}[frame=single, label=fragile1, caption=Fragile Parent Class]
+        The problem comes from the ability to make changes to base class, which require all inheriting classes to be inspected for resulting faulty behaviours.
+        For example here is example code for parent and child class in listing \ref*{fragile1}.
+        \begin{lstlisting}[frame=single, label=fragile1, caption=Fragile Parent Class]
 public class Parent{
-    public virtual void DisplayToConsole(string message)
-    {
-        Console.WriteLine(message);
-    }
-    public virtual void LogToFile(string message){
-        // TODO: write to file
-    }
+public virtual void DisplayToConsole(string message)
+{
+    Console.WriteLine(message);
+}
+public virtual void LogToFile(string message){
+    // TODO: write to file
+}
 }
 public class Child : Parent{
-    public override void DisplayToConsole(string message)
-    {
-        LogToFile(message);
-    }
+public override void DisplayToConsole(string message)
+{
+    LogToFile(message);
 }
-    \end{lstlisting}
-          The example program above is pretty straight forward - the Child class wants to log all requests to file instead. However, there is a problem of a fragile class in this program. Once Parent class was requested to also display message to console, so just 1 line modification was performed in the Parent class, which now completely halts the program, by locking it in the infite loop, see listing \ref*{fragile2}.
-          \begin{lstlisting}[frame=single, label=fragile2, caption=Fragile Parent Class Backfired]
+}
+        \end{lstlisting}
+        The example program above is pretty straight forward - the Child class wants to log all requests to file instead. However, there is a problem of a fragile class in this program. Once Parent class was requested to also display message to console, so just 1 line modification was performed in the Parent class, which now completely halts the program, by locking it in the infinite loop, see listing \ref*{fragile2}.
+        \begin{lstlisting}[frame=single, label=fragile2, caption=Fragile Parent Class Backfired]
 public class Parent{
     public virtual void DisplayToConsole(string message)
     {
@@ -144,14 +148,13 @@ public class Child : Parent{
     }
 }
     \end{lstlisting}
-          This seemingly harmless and thoughtful change to Parent class, suddenly breaks all existing programs that derive from this class if the decide to override the behaviour of DisplayToConsole with LogToFile.
+        This seemingly harmless and thoughtful change to Parent class, suddenly breaks all existing programs that derive from this class if the decide to override the behaviour of DisplayToConsole with LogToFile.
 
     \item \textbf{The diamond problem} \newline
-          The data model of OOP is based on inheritance. There is an example with fruits and decay. Naturally, all fruits slowly decay, they might have different rate and the rate might be affected by the environment. Although this might sound reasonable, there is another example with aluminum and decay. Aluminum is a metal, which will also decay over time. Just like the fruits, it has a different rate and slightly different conditions before it begins to decay. Furthermore, the decay operation, or 'function', is slightly different to that of a fruit. Despite that, both aluminum and fruit decay over time.
-          The diamond problem, however, takes this matter a step further and asks a fundamental question 'is this inheritance even legal?'
-          The following example in listing \ref*{diamond1} will address legality of inheritance.
-          \newpage
-          \begin{lstlisting}[frame=single, label=diamond1, caption=Inheritance Problem]
+        The data model of OOP is based on inheritance. There is an example with fruits and decay. Naturally, all fruits slowly decay, they might have different rate and the rate might be affected by the environment. Although this might sound reasonable, there is another example with aluminum and decay. Aluminum is a metal, which will also decay over time. Just like the fruits, it has a different rate and slightly different conditions before it begins to decay. Furthermore, the decay operation, or 'function', is slightly different to that of a fruit. Despite that, both aluminum and fruit decay over time.
+        The diamond problem, however, takes this matter a step further and asks a fundamental question 'is this inheritance even legal?'
+        The following example in listing \ref*{diamond1} will address legality of inheritance.
+        \begin{lstlisting}[frame=single, label=diamond1, caption=Inheritance Problem]
 public class Student{
     public int StudyYear;
     public bool CanOpenDoor(int roomId){
@@ -216,14 +219,13 @@ There are also C\# specific problems which we also go through:
           \begin{figure}[H]
               \centering
               \includegraphics[width=1\textwidth]{access_java.PNG}
-              \caption{JavaAccess Modifiers}
+              \caption{Java Access Modifiers}
               \label{fig:accessjav}
           \end{figure}
 
     \item \textbf{Not enforced namespaces} \newline
           As previously stated, Java's namespaces, which are called packages, are enforced in the filesystem. When creating item.java file under com/apple folder, Java compiler will force 'package com.apple' declaration.
           C\#, however, doesn't enforce any namespaces onto the filesystem, which, consequently, creates a messy source code environment. Furthermore, unlike in Java, source code files in C\# are not enforced at all, meaning a single file can contain the codebase of the entire project, declaring namespaces one by one and classes within those namespaces, like in the example listing \ref*{enforce1}.
-          \newpage
           \begin{lstlisting}[frame=single, label=enforce1, caption=Example File thisisok.cs]
 namespace Root{
     public class Clazz{
@@ -240,9 +242,9 @@ namespace System.Numerics{
     }
 }
             \end{lstlisting}
-            Having ability to declare namespaces out of place, randomly and for any namespace hurts readability of the code. This makes a single namespace be composed by multiple files, quite literally, hidden across the project and may be even across assemblies.
+            Having ability to declare namespaces out of place, with incorrect filesystem path and, even, multiple namespaces in a single file hurts readability of the code. This makes a single namespace be composed by multiple files, quite literally, hidden across the project and may be even across assemblies.
     \item \textbf{Partial Classes} \newline
-          Another problematic feature of the language is partial classes. When partial class is declared, this means it is can be completed somewhere else in a different file, possibly within a different folder. 
+          Another problematic feature of the language is partial classes. When partial class is declared, this means it can be completed somewhere else in a different file, possibly within a different folder. 
     \item \textbf{Multiple implementations of a Solution} \newline
           When there is a problem, there is an algorithmic solution. However, in case of C\#, the same solution can be implemented a thousand ways, but not because of the Turing-completeness of the language, but rather the design of the language. In the following listing \ref*{multi1}.
           \begin{lstlisting}[frame=single, label=multi1, caption=Example C\# File notok.cs]
@@ -268,16 +270,26 @@ public class Clazz
             \end{lstlisting}
           A simple getter/setter variable example is quite difficult to read and understand what the program is trying to achieve instantly. As the codebase grows and evolves, it becomes increasingly difficult to read the code.
 \end{itemize}
-In conclusion, features and design decisions in the list above, make C\# virtually impossible to navigate through without a proper IDE such as VSCode, Visual Studio, Eclipse, Rider or others.
+In conclusion, features and design decisions in the list above, make C\# virtually impossible to navigate through without a proper IDE such as VSCode, Visual Studio, Eclipse, Rider or any other IDE.
 
-This research has a few distinctive objectives it attempts to address:
+This research proposes Visual Programming Environment, henceforth VPE, GryphonSharp, shorthand G\#. G\# is a visual programming language, an environment, that lets programmer create programs without writing code. G\# VPE is a general-purpose language that transpiles directly into C\# source code. It is bound to C\# language and therefore is not completely visual. This means that, despite it simplifying writing code, it still requires some code, or, rather, text, to be written. A compiled list of cases when text has to be written:
 \begin{itemize}
-    \item A set of questions in the section \nameref{sec:motive}.
-    \item Proposes a design for creating simple programs through G\# language.
-    \item Presents implementation of G\# VPE.
+    \item Declaring functions.\newline
+    Function names need to be specified.
+    \item Declaring Objects and Object fields.\newline
+    Object's name and Object's Fields' names need to be specified.
+    \item Invoking Function.\newline
+    When programmer wants to invoke a function, he has to specify a name of a function.
 \end{itemize}
+From the list, addressing first 2 issues would depend greatly on the direction of future research: 
+If the primary focus is educational, then most likely solution is to have an array of emojis declared explicitly in a configuration file of a project.
+In contrast, if the primary focus is empowering the programmer, then the solution would be related closely with AI-powered autocompletion, some companies, already offer a smart autocompletion which reads codebase and comes up with even blocks of code.\footnote{https://www.tabnine.com/}\footnote{https://www.kite.com/}
 
-// Aims of this research
+The questions of this research are as follows:
+\begin{itemize}
+    \item Can data model of OOP be represented through VPE easily?
+    \item How proposed VPE addresses problems of C\# or OOP mentioned above?
+\end{itemize}
 
 
 
@@ -305,58 +317,111 @@ Unlike most, C language offers naked address referencing, meaning any given numb
 For these reasons C language simply did not offer enough abstraction, security, and flexibility to aid development of complex programs.\cite{schmidt_1977_some}
 
 \subsection{Object-Oriented Programming}
-Object-Oriented Programing, henceforth OOP, was primary focus of early stages of research because it is a paradigm that is used by a target language C\#. Expressing OOP data model, even in native, textual format proves to be troublesome. There are a few design flaws which heavily contribute towards rejecting OOP data model. 
+Object-Oriented Programing, henceforth OOP, was primary focus of early stages of research because it is a paradigm that is used by a target language C\#. Representing OOP data model in visual environment is a difficult task.
 
 For this research, a custom language has to be developed to accommodate all the needs of the visual language. This visual programming paradigm is the primary focus of this research. In the remaining subsections every design of the language will be discussed and explained in-depth. By the end of each subsection, there should be a clear understanding why those decisions came to be and also why the design was rejected.
 
 \subsection{First Visual Programming Environments}
-Visual Programming Environments (henceforth VPE) were introduced for educational purposes first appearing in 2003 for Intel's Computer Clubhouses where young could learn computer technologies. Original designs of scratch were solely intended for young by adding visual programmable elements that manipulate media on screen.\cite{demrkiran_2021_an}
+Visual Programming Environments, or VPEs, were introduced for educational purposes first appearing in 2003 for Intel's Computer Clubhouses where young could learn computer technologies. Original designs of scratch were solely intended for young by adding visual programmable elements that manipulate media on screen.\cite{demrkiran_2021_an}
 Scratch UI uses sturdy design principles that achieve it's ultimate goal i.e. Single Window with multiple tabs ensures there is always visible primary components such as scene or code.
 
 \subsection{Minecraft and Redstone}
 Minecraft is a computer game that was introduced in 2009. Minecraft opened a new genre - Sandbox. Sandbox genre, effectively, allowed players to manipulate their environments and shape them visually how they see fit. Game introduced first few 'quests' that introduced player to the game, which then left player to explore world on their own. Minecraft is extremely successful, but not for a straightforward 'because of this and that' reasons. \cite{baek_2020_mining}
-Why Minecraft game that has nothing to do with teaching and programming\cite{baek_2020_mining} (at the very least initially, it was designed for self-entertainment by creating stories using creative tools that the game provided\cite{booch_2013_from}) has a communities which focus heavily on implementing complex computing systems (even entire CPU architectures in Minecraft using nothing else but plain single-thread Redstone).\cite{matteson_2017_a}
+While Minecraft game that has nothing to do with teaching and programming\cite{baek_2020_mining} at the very least initially, it was designed for self-entertainment by creating stories using creative tools that the game provided\cite{booch_2013_from}. Minecraft has communities which focus heavily on implementing complex computing systems (even entire CPU architectures in Minecraft using nothing else but plain Redstone).\cite{matteson_2017_a}
 
 \subsection{Transpilers, an upgrade to existing languages}
-Transpilers take source code and compile into other source code. This is 'transpilation'.\cite{cifuentes_1998_assembly}
+Transpilers take source code and compile into other source code. This process is called 'transpilation'.\cite{cifuentes_1998_assembly}
+Transpilers are used broadly in computing. Nowadays, transpiled languages are ultimately becoming more popular that their target languages.\footnote{https://codete.com/blog/type-script-vs-java-script-which-one-to-choose-for-2021-web-applications} Ultimately, when discussing VPE, some kind of transpilation will always be happening due to nature of source code that VPE store. Below is an example VPE source code of G\# in listing \ref{transpiler} and it's compiled version in C\# in listing \ref{transpilerresult}.
+\begin{lstlisting}[frame=single, label=transpiler, caption=G\#'s Intermediate Representation]
+{
+    "schema": {
+        "schemaType": 1,
+    },
+    "dataNodes": {
+        "0": {
+            "type": 1,
+            "target": 0
+        },
+        "1": {
+            "type": 0,
+            "target": 2,
+            "value": "Hello World from Gryphon#!"
+        }
+    },
+    "codeNodes": {
+        "0": {
+            "type": 0,
+            "target": "Main",
+            "execution": 1,
+            "outputs": [
+                0
+            ],
+            "x": 184.15533980582524,
+            "y": -79.79611650485435
+        },
+        "1": {
+            "type": 3,
+            "reference": "System.Console",
+            "target": "WriteLine",
+            "execution": 3,
+            "inputs": [
+                1
+            ],
+            "x": 177.25163280874574,
+            "y": 140.22128055042037
+        },
+        "2": {
+            "type": 2,
+            "dataReference": 1,
+            "x": 768.4757281553399,
+            "y": 71.07766990291259
+        },
+        "3": {
+            "type": 100,
+            "x": 123,
+            "y": 357
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, label=transpilerresult, caption=Transpiled output]
+//----------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//----------------------------------------------------
+
+namespace Root {
+    
+    
+    public class HelloWorld {
+        
+        public static void Main() {
+            System.Console.WriteLine("Hello World from GryphonSharp#!");
+        }
+    }
+}
+\end{lstlisting}
 
 \subsection{Blockly and general-purpose VPE}
-Blockly was a good take on general-purpose VPE. It uses transpiler principles to interpret visual representation of a code.\cite{7369000} It support wide range of target languages, however, currently, without specifically designed environment, Blockly, out-of-the-box, only supports few paradigms: functions, variables, arithmetic operations, flow control (loops, if statements) and a few more basic primitives like lists and color.\footnote{https://developers.google.com/blockly}
-Blockly, natively, is only a set of theories and findings that build on top of preexisting VPE 'Scratch'.\cite{8120404} Despite it having rich and extensible documentation, Blockly is just a set of tools for creating VPEs.\cite{whitley_2006_evidence,bresson_2007_musical}
-
-
-
-
-
-\section{Motivation}
-\label{sec:motive}
-How C achieved it's purpose?
-Why has it became so popular?
-
-How C represented basic programming constructs (for, while loops, if statements)?
-When and why it fails?
-
-Why Scratch became so popular?
-How Scratch aims to achieve their aims?
-
-Scratch is limited by Scratch VM.
-
-Transpilers are interesting take on simplifying development.
-Any attempts to generate code from Visual Programming Environments - refer to Blockly.
-
-// merge into introduction
+Blockly is a successor to scratch, that aims to become general-purpose VPE. It uses transpiler principles to interpret visual representation of a code.\cite{7369000} It support wide range of target languages, however, currently, without specifically designed environment, Blockly, out-of-the-box, only supports few paradigms: functions, variables, arithmetic operations, flow control (loops, if statements) and a few more basic primitives like lists and color.\footnote{https://developers.google.com/blockly}
+Blockly, natively, is only a set of theories and findings that build on top of preexisting VPE 'Scratch'.\cite{8120404} Despite it having rich and extensible documentation, Blockly is just a set of tools for creating specific VPEs.\cite{whitley_2006_evidence,bresson_2007_musical}
 
 \section{System Design}
-Previously mentioned transpilers were 'the next step' towards higher languages that might provide task-specific abstraction level and paradigms for easy development of said tasks.\cite{gribova_2013_ontology} For example, many game studios that started working in limited language such as Lua had to either rewrite their entire game on a different engine under different programming language. However, since introduction of transpilers that use higher-level or simpler languages to transpile to low-lever or complex languages, one of the most popular examples (in addition to mentioned Typescript-Javascript transpiler) being CSharp.lua\footnote{https://github.com/yanghuan/CSharp.lua} which takes c\# code and transpilers it into Lua code retaining most, if not all original language features such as reflection, polymorphism, encapsulation etc.
+Previously mentioned transpilers were 'the next step' towards higher languages that might provide task-specific abstraction level and paradigms for easy development of said tasks.\cite{gribova_2013_ontology} For example, many game studios that started working in limited language such as Lua had to either rewrite their entire game on a different engine under different programming language. However, since introduction of transpilers that use higher-level or simpler languages to transpile to low-lever or complex languages, one of examples (in addition to mentioned Typescript-Javascript transpiler) being CSharp.lua\footnote{https://github.com/yanghuan/CSharp.lua} which takes c\# code and transpilers it into Lua code retaining most, if not all original language features such as reflection, polymorphism, encapsulation etc.
 
-In this project, it was decided to utilize offline transpiler. This decision is motivated by strong presence of high-level heavily optimized languages such as Java, Javascript, C\#, Python, C++ and others. In contrast, the other choices were: Compiler and Interpreter.
-Interpreter is an algorithm which uses calls and translates them one by one into bytecode, all of this 'interpretation' is happening at runtime and therefore creates huge overhead because every instruction the interpreter executes, essentially has to be looked up before it can be executed. Look up of interpreters is \textit{usually} capped at RAM latency, rather than CPU cache latency, meaning look up of instructions happens in RAM in worst case scenario.
-Compiler both JIT and AOT require significant investment of time to design and implement from scratch. For purposes of this research, creating custom G\# to machine code compiler would be infeasible and would simply go outside of this project's scope.
+GryphonSharp is still a standalone language that can be transpiled, interpreted or compiled. For recap:
+\begin{itemize}
+    \item Transpiled languages are languages that when compiled turn source language source code into target language source code. For example, source language G\#, and it's source code, when compiled is turned into target language - C\# source code.
+    \item Interpreted languages are languages that constructs an array of calls and translates them one by one into bytecode. All of this 'interpretation' is happening at runtime and therefore creates huge overhead because every instruction the interpreter executes, essentially has to be looked up before it can be executed. Look up of interpreters is \textit{usually} capped at RAM latency, rather than CPU cache latency, meaning look up of instructions happens in RAM in worst case scenario. 
+    \item Compiled languages, both JIT and AOT, are languages that compile into bytecode of a target machine before they are executed. JIT compiles it before it needs to be run (and recompiles every time the program is launched), AOT programs are compiled a 'Ahead of Time' and are instantly executed on the target machine. The major difference being that AOT programs only run on machines for which they were compiled.
+\end{itemize}
 
-
-
-
-
+In this project, offline transpiler was used due to nature of the source code. The source code of VPE has to store extra information that the normal source code has no use of, this is usually the case with transpiled languages. Creating transpiled language nowadays is the only possible scenario. Existing languages such as Java, C\#, JS are all supported by multi-billion dollar companies have an extremely complex codebase with very strong optimizations, and support for cross-platform development and deployment.
 
 
 
@@ -410,11 +475,75 @@ This kind of behaviour-enabling design is what allows objects to have multiple b
 
 Research into Behaviour-Oriented-Design, henceforth BOD, \cite{d2857949266349429ebd6e5db6c1d3a3} has been already conducted and provided some results 'good potential', although, the prototype was 'less-advanced' due to time constrains.
 
+Behaviour-Oriented-Design functions as follows:
+There are 3 programming blocks: Objects, events and Behaviours.
+\begin{itemize}
+    \item \textbf{Objects} contain information, functions and means to execute events. A typical Object might look something like figure XXX.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{galaxy_behaviours.PNG}
+        \caption{Example of Object paradigm}
+        \label{fig:bodobj}
+    \end{figure}
+    \item \textbf{Events} are methods, declared in Objects that can be freely executed and are primary means of communicating execution flow and data between objects in a program. A declared event might look something like figure XXX.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{galaxy_behaviours.PNG}
+        \caption{Example of Event paradigm}
+        \label{fig:bodevt}
+    \end{figure}
+    \item \textbf{Behaviours} are a response to call of the event. When the event is triggered, event details are available to behaviour for expansion, editing or even deletion. Behaviour looks like figure XXX.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{galaxy_behaviours.PNG}
+        \caption{Example of Behaviour paradigm}
+        \label{fig:bodbeh}
+    \end{figure}
+\end{itemize}
+
+
+
+
+
+
 \subsection{Node-like Shader Editor Design}
-// write up\cite{kiper_1997_criteria, coronado_2020_visual}
+Another proposed design was based on Shader Editors out there. Refer to example in figure \ref{fig:blendershader}. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{blendershaderNE.png}
+    \caption{Galaxy Data Editor}
+    \label{fig:blendershader}
+\end{figure}
+Node-based shader languages function by taking the output node and working backwards the dependency chain. In the example, Material Output is the final output node, so the program will start collection of dependencies to execute this node. First it sees is the modification of Surface argument, so it moves to node 'Glossy BSDF', where it also sees an argument parsed from other function. So far, transpiler hasn't written a single line that can be executed because for as long as at least a single argument is dependent the output is stalled before everything can be resolved to construct a proper execution flow. Going back to 'Glossy BSDF' function, argument colour is dependent on output of function Image Texture. When transpiler finally reaches Image Texture function, argument 'Vector' is empty, meaning this must be the beginning of execution. Once transpiler makes it to the beginning of execution, the transpiler can begin constructing execution flow, executing first 'Image Texture' node and saving colour output into a variable. It will then execute node 'Glossy BSDF' and parse colour written into auto variable in the previous step into argument colour of 'Glossy BSDF' function. Finally, output BSDF of the function 'Glossy BSDF' is written into another auto variable. Lastly, the very last node 'Material Output' is executed with argument 'Surface' being set to auto variable that corresponds to BSDF.
+
+Node editor is quite self-explanatory and requires very little operation documentation. Most shader node editors require users to know what the nodes do instead of explaining how to move and drag them around - usually, it is implied that they are so easy to use, that node editors themselves don't need a manual.
+A classical shader node editor has nodes that can be dragged around. Every node has input and output sockets, on the left and on the right respectively. Sockets are used to exchange data between nodes, which ultimately play role of function invocations. Sockets can be connected with each other by a familiar drag-n-drop functionality, same functionality that is used for nodes themselves. Input sockets can only be connected with output sockets, similarly output sockets can only be connected with input sockets. Input/output sockets on the same node cannot be connected with each other, this is to prevent recursion. When nodes are left alone they are excluded from execution and are completely out of reach by transpiler. In short, if a node is reachable through a series of connections from final node it will be executed, if it isn't, transpiler will never reach the node, effectively making a node or even group of nodes 'unreachable code'. Typically, 'unreachable code' exist in projects as commented code, that played a role in testing during the development of the project. Such code is usually deleted altogether, but sometimes is left in place for further tests. Node editor allows a group of code to be 'commented', user only has to sever a single connection, connecting the group of code with the output. From example in figure \ref{fig:blendershader}, if the connection between 'Glossy BSDF' and 'Material Output' is severed, the two nodes 'Image Texture' and 'Glossy BSDF' will not be executed, and when the target source code is generated by transpiler will not contain any code.
+
+Before assessing the completeness of VPL\cite{kiper_1997_criteria}, VPL has to pass Turing test. Unfortunately, at this point there is a major red flag with the design of the VPL - execution flow. Execution flow model of the shader node VPL is executed 'on-demand' or 'just-in-time'. This model is fit for resources - to make resources available, or only compile when something is needed, but is not true when it comes to execution. Execution flow if essential for programmer, programmer should have the ability to branch. When using shader-based VPL, all execution flow is ultimately handled by transpiler and when output and input is severed like in example with 'Glossy BSDF' and 'Material Output', part of the code becomes unreachable to transpiler therefore becoming 'unreachable code' therefore never being executed. This is a major red flag in the design of shader-based VPL. Naturally, shader node editors have no need controlling execution flow, because they only require a single output node 'Material' and only require data to be parsed into that final material output node.
+
+Conventional programs, even simple 'Hello World' programs require 'detour' in the execution which, nominally, has no impact on the date that the program currently holds. Refer to code example in listing \ref{shadertranspiler}.
+\begin{lstlisting}[frame=single, label=shadertranspiler, caption=Example Execution Detour]
+public class Program {
+    public static int number;
+    public static int GetNumber() {
+        number++;
+        System.Console.WriteLine("Number Count: "+number);
+        return number;
+    }
+}
+\end{lstlisting}
+On the example, 'Program' class holds static data called 'number'. This integer field can be retrieved through function GetNumber(), however, inside a function is a method \lstinline[columns=fixed]{System.Console.WriteLine("Number Count: "+number);} which is example of a detour. This function invocation has no impact on the data 'number' and in the shader node editor will be, therefore, discarded.
+
+This language design has fundamental flow with controlling the execution of the program, not providing a user with any control over the execution of program, which is why this language design was rejected.
+
+\cite{coronado_2020_visual}
 \subsection{Unreal Engine Blueprints inspired Design}
+Unreal Engine Blueprints is a node-like VPL that operates inside Unreal Engine's VM. It has the user interface as in figure XXX. 
+
+A typical function which multiplies parsed number by two will look like figure XXX.
+
 // write up
-\subsection{Stateless Node Editor}
+\subsection{Conclusive Design}
 // write up\cite{8120404}
 
 
@@ -468,7 +597,8 @@ Frontend of NE is written in Typescript, unlike extension it has slightly differ
 The second part of the NE is backend. Backend is written in Typescript as well and can be natively run by NodeJS runtime. Due to limitation and old technology used in VSCode, backend code is still compiled into deprecated CommonJS code. Extension code is then injected into a developer instance of VSCode. For release versions, code is bundled and executed as a module when added.
 
 \section{Discussion}
-This project was heavily time-constrained and therefore was left in a work-in-progress state.
+This research primarily contributes a set of artifacts: Node Editor, G2C and Overwatch. This research also contributes VPL designs, over the duration of the research, the research went over a few existing VPLs as well as proposed some VPL.
+
 
 
 
